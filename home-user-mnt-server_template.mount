@@ -39,5 +39,5 @@ TimeoutSec=3
 
 [Install]
 #tell systemd that there is an automount that is useless without this mount unit
-RequiredBy=$server.automount
+RequiredBy=home-$user-mnt-$server.automount
 
