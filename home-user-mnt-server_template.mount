@@ -1,0 +1,43 @@
+# if server is called $SERVER and the mount point is located at /home/$user/mnt/$server, name this unit "home-$user-mnt-$server.mount". for systemwide installation, copy this file to /etc/systemd/system/ and enable the .automount (this .mount unit does NOT need to be enabled, as the automount pulls it at install time) services with "systemctl enable". see https://www.freedesktop.org/software/systemd/man/systemd.mount.html for details.
+
+# replace $VAR with applicable values
+
+[Unit]
+Description="Mount unit for $SERVER"
+
+#tell systemd that this unit needs a working network connection, otherwise dont run it.
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+# What= points to the network adress the share is located at. the syntax is dependent on the host filesystem. for nfs, use: What=[$ip|$hostname|$url]:/$share. for cifs use: What=//$ip|$hostname|$url]/$share
+What=
+# define the mount point on the user system
+Where=/home/$user/mnt/$server
+
+# define the filesystem or leave "auto" for mount to choose. depends on installed filesystem protocols as well (e.g. client system must understand ntfs to mount a remote ntfs share.)
+Type=nfs|cifs|auto
+
+# filesystem specific and general options to pass to mount seperated by commas (no spaces, like in fstab files). for user authentication, append "username=$username,password=$password"
+Options=noauto,nofail,timeo=40,_netdev,user
+
+#    Takes a boolean argument. If true, parsing of the options specified in Options= is relaxed, and unknown mount options are tolerated. This corresponds with mount(8)'s -s switch. Defaults to off.
+SloppyOptions=true
+
+#     Takes a boolean argument. If true, detach the filesystem from the filesystem hierarchy at time of the unmount operation, and clean up all references to the filesystem as soon as they are not busy anymore. This corresponds with umount(8)'s -l switch. Defaults to off.
+LazyUnmount=true
+
+#    Takes a boolean argument. If true, force an unmount (in case of an unreachable NFS system). This corresponds with umount(8)'s -f switch. Defaults to off.
+ForceUnmount=true
+
+# set permissions
+DirectoryMode=0775
+
+# time the mount command should wait for the server befor giving up in seconds.
+TimeoutSec=3
+
+
+[Install]
+#tell systemd that there is an automount that is useless without this mount unit
+RequiredBy=$server.automount
+
