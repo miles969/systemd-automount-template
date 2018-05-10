@@ -15,7 +15,7 @@ What=
 # define the mount point on the user system
 Where=/home/$user/mnt/$server
 
-# define the filesystem or leave "auto" for mount to choose. depends on installed filesystem protocols as well (e.g. client system must understand ntfs to mount a remote ntfs share.)
+# define the filesystem or leave "auto" for mount to choose. depends on installed filesystem protocols as well (e.g. client system must understand nfs to mount a remote nfs share.)
 Type=nfs|cifs|auto
 
 # filesystem specific and general options to pass to mount seperated by commas (no spaces, like in fstab files). for user authentication, append "username=$username,password=$password"
