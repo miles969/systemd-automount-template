@@ -5,10 +5,6 @@
 [Unit]
 Description="Mount unit for $SERVER"
 
-#tell systemd that this unit needs a working network connection, otherwise dont run it.
-After=network-online.target
-Wants=network-online.target
-
 [Mount]
 # What= points to the network adress the share is located at. the syntax is dependent on the host filesystem. for nfs, use: What=[$ip|$hostname|$url]:/$share. for cifs use: What=//[$ip|$hostname|$url]/$share
 What=
